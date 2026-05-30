@@ -1,52 +1,57 @@
-# 🌤️ Weather Checker
+# 🌤️ 天气查询小工具
 
-Get real-time weather conditions and a 3-day forecast for any city worldwide — using a free API with no key required!
+一个用 Python 写的实时天气查询工具，输入城市名即可查看天气，无需注册或 API Key。
 
-## 🚀 How to Run
+## 🚀 运行方式
 
 ```bash
 python weather.py
 ```
 
-**No dependencies needed!** Uses only Python's built-in `urllib` and `json` modules.
-
-## 📖 Usage
+## 📖 使用说明
 
 ```
-🏙️  City: Shanghai
-Fetching weather for 'Shanghai'...
+     🌤️  天气查询小工具
+     输入城市名查天气
+     输入 quit 退出
 
-==================================================
-  🌤️   Weather for Shanghai
-  📍 Shanghai, China
-==================================================
-  🌡️  Temperature:  22°C  (feels like 24°C)
-  ☁️  Condition:     Sunny
-  💧 Humidity:      65%
-  💨 Wind:          12 km/h SE
-  👁️  Visibility:    10 km
-  ☀️  UV Index:      5
-==================================================
+常用城市：北京 | 上海 | 广州 | 深圳 | 杭州 | 成都 | 武汉 | 南京
 
-📅  3-Day Forecast:
-  2026-05-31 | Sunny          | 18°C ~ 26°C
-  2026-06-01 | Partly cloudy  | 20°C ~ 28°C
-  2026-06-02 | Light rain     | 19°C ~ 24°C
+请输入城市名：深圳
+
+╔══════════════════════════════╗
+║  🌤️  深圳 实时天气
+╠══════════════════════════════╣
+║  天气：晴
+║  温度：28°C（体感 30°C）
+║  湿度：65%
+║  风速：12 km/h（东南）
+║  能见度：10 km
+║  紫外线指数：5
+╚══════════════════════════════╝
 ```
 
-## 🛠️ Features
+## 🛠️ 用到的知识点
 
-- ✅ Real-time weather from [wttr.in](https://wttr.in) (free, no API key)
-- ✅ Temperature, humidity, wind, visibility, UV index
-- ✅ 3-day forecast
-- ✅ Supports city names in English and Chinese
-- ✅ No external dependencies
+- 网络请求（urllib）
+- JSON 数据解析
+- 异常处理
+- 字符串格式化
+- 用户交互循环
 
-## 📚 What I Learned
+## 🔌 接口说明
 
-- Making HTTP requests with `urllib`
-- Parsing JSON responses
-- Working with nested dictionaries
-- String formatting for clean output
-- Error handling for network requests
-- Building an interactive CLI tool
+使用 [wttr.in](https://wttr.in) 提供的免费天气 API，无需注册、无需 API Key，查询次数无限制。
+
+支持中英文城市名，也支持拼音（如 `shenzhen`）。
+
+## 📝 后续可以增强的功能
+
+- [ ] 查询未来几天的天气预报
+- [ ] 保存查询历史
+- [ ] 多城市对比
+- [ ] 图形界面版本
+
+---
+
+*出门前看一眼，再也不用纠结穿什么。*

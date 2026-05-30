@@ -1,106 +1,102 @@
 """
-🌤️ Weather Checker
-Get real-time weather for any city using the free wttr.in API.
-
-Run: python weather.py
-Dependency: None (uses only built-in urllib!)
+天气查询小工具
+通过免费 API 查询任意城市的实时天气。
+不需要 API Key，开箱即用。
 """
 
 import urllib.request
 import json
 
 
-def get_weather(city):
+def 查询天气(城市):
     """
-    Fetch weather data from wttr.in (free, no API key needed).
-    Returns a dictionary with weather info.
+    通过 wttr.in 免费 API 查询指定城市的天气信息。
+    返回格式化的天气数据字典，失败则返回 None。
     """
-    # wttr.in provides a free JSON weather API
-    url = f"https://wttr.in/{city}?format=j1"
+    # wttr.in 是一个免费的天气 API，返回 JSON 格式数据
+    接口地址 = f"https://wttr.in/{城市}?format=j1"
 
     try:
-        with urllib.request.urlopen(url, timeout=10) as response:
-            data = json.loads(response.read().decode("utf-8"))
-            return data
+        # 发送请求
+        请求 = urllib.request.Request(接口地址)
+        请求.add_header("User-Agent", "WeatherChecker/1.0")
+
+        with urllib.request.urlopen(请求, timeout=10) as 响应:
+            原始数据 = json.loads(响应.read().decode("utf-8"))
+
+        # 提取当前天气
+        当前 = 原始数据["current_condition"][0]
+
+        天气信息 = {
+            "城市": 城市,
+            "温度": f"{当前['temp_C']}°C",
+            "体感温度": f"{当前['FeelsLikeC']}°C",
+            "天气": 当前["weatherDesc"][0]["value"],
+            "湿度": f"{当前['humidity']}%",
+            "风速": f"{当前['windspeedKmph']} km/h",
+            "风向": 当前["winddir16Point"],
+            "能见度": f"{当前['visibility']} km",
+            "紫外线指数": 当前["uvIndex"],
+        }
+
+        return 天气信息
+
+    except urllib.error.HTTPError:
+        print(f"❌ 找不到城市「{城市}」，请检查城市名是否正确")
+        return None
     except urllib.error.URLError:
+        print("❌ 网络连接失败，请检查网络后重试")
         return None
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"❌ 查询出错：{e}")
         return None
 
 
-def display_weather(city, data):
-    """Nicely format and display weather information."""
-    if data is None:
-        print(f"❌ Could not fetch weather for '{city}'.")
-        print("   Check your internet connection or city name.")
+def 显示天气(信息):
+    """格式化显示天气信息"""
+    if not 信息:
         return
 
-    current = data["current_condition"][0]
-    location = data["nearest_area"][0]
-
-    # Extract data
-    temp_c = current["temp_C"]
-    feels_like = current["FeelsLikeC"]
-    humidity = current["humidity"]
-    weather_desc = current["weatherDesc"][0]["value"]
-    wind_speed = current["windspeedKmph"]
-    wind_dir = current["winddir16Point"]
-    visibility = current["visibility"]
-    uv_index = current["uvIndex"]
-
-    country = location["country"][0]["value"]
-    area = location["areaName"][0]["value"]
-
-    print("\n" + "=" * 50)
-    print(f"  🌤️   Weather for {city.title()}")
-    print(f"  📍 {area}, {country}")
-    print("=" * 50)
-    print(f"  🌡️  Temperature:  {temp_c}°C  (feels like {feels_like}°C)")
-    print(f"  ☁️  Condition:     {weather_desc}")
-    print(f"  💧 Humidity:      {humidity}%")
-    print(f"  💨 Wind:          {wind_speed} km/h {wind_dir}")
-    print(f"  👁️  Visibility:    {visibility} km")
-    print(f"  ☀️  UV Index:      {uv_index}")
-    print("=" * 50)
-
-    # Forecast for next 3 days
-    print("\n📅  3-Day Forecast:")
-    print("-" * 40)
-    for day in data["weather"][:3]:
-        date = day["date"]
-        high = day["maxtempC"]
-        low = day["mintempC"]
-        avg = day["avgtempC"]
-        desc = day["hourly"][4]["weatherDesc"][0]["value"]
-        print(f"  {date} | {desc:15s} | {low}°C ~ {high}°C")
+    print(f"""
+╔══════════════════════════════╗
+║  🌤️  {信息['城市']} 实时天气
+╠══════════════════════════════╣
+║  天气：{信息['天气']}
+║  温度：{信息['温度']}（体感 {信息['体感温度']}）
+║  湿度：{信息['湿度']}
+║  风速：{信息['风速']}（{信息['风向']}）
+║  能见度：{信息['能见度']}
+║  紫外线指数：{信息['紫外线指数']}
+╚══════════════════════════════╝
+""")
 
 
-def main():
-    print("=" * 50)
-    print("    🌤️   Weather Checker")
-    print("=" * 50)
-    print("Enter a city name to get weather (type 'quit' to exit)")
+def 主程序():
+    """主循环"""
+    print("=" * 36)
+    print("     🌤️  天气查询小工具")
+    print("     输入城市名查天气")
+    print("     输入 quit 退出")
+    print("=" * 36)
+
+    常用城市 = ["北京", "上海", "广州", "深圳", "杭州", "成都", "武汉", "南京"]
+    print(f"\n常用城市：{' | '.join(常用城市)}")
 
     while True:
-        city = input("\n🏙️  City: ").strip()
+        城市 = input("\n请输入城市名：").strip()
 
-        if not city:
-            continue
-
-        if city.lower() == "quit":
-            print("Goodbye! 👋")
+        if 城市.lower() == "quit":
+            print("再见！👋")
             break
 
-        # Support Chinese city names
-        print(f"Fetching weather for '{city}'...")
-        data = get_weather(city)
+        if not 城市:
+            print("请输入城市名！")
+            continue
 
-        if data:
-            display_weather(city, data)
-        else:
-            print(f"❌ Could not fetch weather for '{city}'.")
+        print(f"正在查询 {城市} 的天气...")
+        天气信息 = 查询天气(城市)
+        显示天气(天气信息)
 
 
 if __name__ == "__main__":
-    main()
+    主程序()
