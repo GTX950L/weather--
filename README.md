@@ -1,5 +1,13 @@
 # 🌤️ 天气查询小工具
 
+<div align="center">
+
+![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=flat-square&logo=python&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+![Level](https://img.shields.io/badge/练习-初学者-blue?style=flat-square)
+
+</div>
+
 一个用 Python 写的实时天气查询工具，输入城市名即可查看天气，无需注册或 API Key。
 
 ## 🚀 运行方式
